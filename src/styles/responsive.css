@@ -5,8 +5,7 @@
   .p-top b{padding:3px 5px}
   .poster{padding:18px}
   .statement-grid{grid-template-columns:1fr;align-items:start}
-  .ent{grid-template-columns:1fr}
-  .ent-art{min-height:260px;order:-1}
+  .ent-steps{grid-template-columns:1fr 1fr}
   .foot-grid{grid-template-columns:1fr 1fr 1fr}
   .foot-brand{grid-column:1/-1}
 }
@@ -54,6 +53,9 @@
   .statement{padding:72px 0}
   .values li{font-size:16px;grid-template-columns:40px 1fr}
   .enterprise{padding-top:64px}
+  .ent-steps{grid-template-columns:1fr}
+  .ent-step{min-height:250px}
+  .ent-n{font-size:170px}
   .official-in p{font-size:15px}
   .faq{padding-top:72px}
   .faq summary{padding:20px 60px 20px 20px}
