@@ -1,0 +1,67 @@
+---
+import Brand from './Brand.astro';
+import Icon from './Icon.astro';
+import { site } from '../data/courses';
+const links = [
+  { href: '#inicio', label: 'Inicio' },
+  { href: '#programas', label: 'Programas' },
+  { href: '#ruta', label: 'Cómo aprendes' },
+  { href: '#empresas', label: 'Empresas' },
+  { href: '#preguntas', label: 'Preguntas' },
+];
+---
+<header class="nav" id="nav">
+  <div class="wrap nav-in">
+    <Brand />
+    <nav class="nav-links" aria-label="Principal">
+      {links.map((l, i) => <a href={l.href} class:list={{ active: i === 0 }}>{l.label}</a>)}
+    </nav>
+    <div class="nav-end">
+      <a class="login" href={`${site.base}/iniciar-sesion`}>Iniciar sesión</a>
+      <a class="btn btn-primary btn-sm" href={`${site.base}/registro`}>Empieza gratis</a>
+      <button class="menu-btn" aria-label="Abrir menú" aria-expanded="false" aria-controls="mnav"><Icon name="menu" /></button>
+    </div>
+  </div>
+  <nav class="mnav" id="mnav" aria-label="Menú móvil" inert>
+    {links.slice(1).map((l) => <a href={l.href}>{l.label}</a>)}
+    <a href={`${site.base}/iniciar-sesion`}>Iniciar sesión</a>
+  </nav>
+</header>
+
+<script>
+  const nav = document.getElementById('nav')!;
+  const onScroll = () => nav.classList.toggle('scrolled', scrollY > 24);
+  addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  // Menú móvil
+  const btn = nav.querySelector<HTMLButtonElement>('.menu-btn')!;
+  const mnav = document.getElementById('mnav')!;
+  const setMenu = (open: boolean) => {
+    mnav.classList.toggle('open', open);
+    mnav.inert = !open;
+    btn.setAttribute('aria-expanded', String(open));
+    btn.setAttribute('aria-label', open ? 'Cerrar menú' : 'Abrir menú');
+  };
+  btn.addEventListener('click', () => setMenu(btn.getAttribute('aria-expanded') !== 'true'));
+  mnav.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setMenu(false)));
+
+  // Subrayado amarillo en la sección activa
+  const links = [...nav.querySelectorAll<HTMLAnchorElement>('.nav-links a')];
+  const io = new IntersectionObserver(
+    (entries) =>
+      entries.forEach((e) => {
+        if (!e.isIntersecting) return;
+        links.forEach((l) => {
+          const on = l.getAttribute('href') === '#' + e.target.id;
+          l.classList.toggle('active', on);
+          on ? l.setAttribute('aria-current', 'location') : l.removeAttribute('aria-current');
+        });
+      }),
+    { rootMargin: '-45% 0px -50% 0px' }
+  );
+  links.forEach((l) => {
+    const el = document.querySelector(l.getAttribute('href')!);
+    if (el) io.observe(el);
+  });
+</script>

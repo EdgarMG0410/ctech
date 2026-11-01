@@ -1,0 +1,5 @@
+/* Official */
+.official{padding:40px 0 20px}
+.official-in{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:26px 30px;border:1px solid var(--line);border-radius:var(--r);background:var(--bg-2);flex-wrap:wrap}
+.official-in p{margin:0;font-size:17px;font-weight:500;letter-spacing:-.015em;display:flex;align-items:center;gap:14px}
+.official-in .ico{color:var(--yellow);width:24px;height:24px}

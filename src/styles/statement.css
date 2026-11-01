@@ -1,0 +1,9 @@
+/* Statement */
+.statement{padding:110px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:radial-gradient(70% 90% at 85% 0%,rgba(41,81,100,.35),transparent 70%)}
+.statement-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:clamp(40px,7vw,120px);align-items:end}
+.statement h2{font-size:clamp(36px,4.4vw,64px);line-height:1.04;letter-spacing:-.05em;font-weight:600;margin:18px 0 0}
+.statement h2 em{font-style:normal;color:var(--yellow)}
+.values{list-style:none;margin:0;padding:0;counter-reset:v}
+.values li{display:grid;grid-template-columns:52px 1fr;gap:4px;padding:22px 0;border-top:1px solid var(--line);font-size:18px;letter-spacing:-.015em;line-height:1.45}
+.values li:last-child{border-bottom:1px solid var(--line)}
+.values li:before{counter-increment:v;content:"0" counter(v);font-size:13px;color:var(--yellow);font-weight:600;padding-top:4px;letter-spacing:.08em}

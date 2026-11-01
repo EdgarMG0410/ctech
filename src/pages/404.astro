@@ -1,0 +1,17 @@
+---
+import Base from '../layouts/Base.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+---
+<Base title="Página no encontrada — C Tech Consulting">
+  <Nav />
+  <main id="contenido" class="closing" style="padding-top:180px;min-height:70svh">
+    <div class="wrap">
+      <div class="eyebrow">Error 404</div>
+      <h2>Esta página no existe.</h2>
+      <p>Revisa la dirección o vuelve al inicio para explorar los cursos.</p>
+      <a class="btn btn-primary" href="/">Volver al inicio</a>
+    </div>
+  </main>
+  <Footer />
+</Base>

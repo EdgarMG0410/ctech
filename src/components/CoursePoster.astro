@@ -1,0 +1,16 @@
+---
+import type { Course } from '../data/courses';
+import CourseArt from './CourseArt.astro';
+import Icon from './Icon.astro';
+interface Props { course: Course }
+const { course: c } = Astro.props;
+---
+<button class:list={['poster', c.theme]} data-id={c.id} aria-label={`Ver curso ${c.title}`}>
+  <CourseArt theme={c.theme} variant="portrait" />
+  <span class="p-top"><span><span class="mod"></span>C TECH / {c.label.toUpperCase()}</span>{c.free && <b>GRATIS</b>}</span>
+  <span class="p-line" set:html={c.tagline.replace('\n', '<br>')} />
+  <span class="p-course">
+    <span><b>{c.shortTitle ?? c.title}</b><small>Con {c.teacher}</small></span>
+    <Icon name="arrow-up-right" />
+  </span>
+</button>

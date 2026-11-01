@@ -1,0 +1,32 @@
+---
+import Brand from './Brand.astro';
+import { site } from '../data/courses';
+---
+<footer class="footer">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <Brand full label="C Tech Consulting, volver al inicio" />
+        <p>Formación práctica para profesionales, empresas y emprendedores.</p>
+      </div>
+      <div><h5>Aprende</h5><nav aria-label="Aprende"><a href="#programas">Programas</a><a href="#ruta">Cómo aprendes</a><a href="#empresas">Empresas</a></nav></div>
+      <div><h5>Conócenos</h5><nav aria-label="Conócenos"><a href={`${site.base}/nosotros`}>Nosotros</a><a href={`${site.base}/acreditacion`}>Validez oficial</a><a href={`${site.base}/blog`}>Blog y recursos</a></nav></div>
+      <div><h5>Hablemos</h5><nav aria-label="Hablemos"><a href={`${site.base}/contacto`}>Contacto</a><a href="#preguntas">Preguntas frecuentes</a><a href={`mailto:${site.email}`}>{site.email}</a></nav></div>
+    </div>
+    <div class="foot-bottom"><span>© {new Date().getFullYear()} {site.name} · {site.city}</span><button class="motion" aria-pressed="false">Reducir movimiento</button></div>
+  </div>
+</footer>
+<script>
+  // "Reducir movimiento": detiene animaciones y el barajeo automático
+  const btn = document.querySelector<HTMLButtonElement>('.motion')!;
+  btn.addEventListener('click', () => {
+    const still = document.body.classList.toggle('still');
+    btn.setAttribute('aria-pressed', String(still));
+    btn.textContent = still ? 'Activar movimiento' : 'Reducir movimiento';
+    document.dispatchEvent(new Event('motionchange'));
+  });
+  // Aparición suave de secciones
+  const rv = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('in'); rv.unobserve(e.target); } }), { threshold: 0.15 });
+  document.querySelectorAll('.reveal').forEach((el) => rv.observe(el));
+</script>
+

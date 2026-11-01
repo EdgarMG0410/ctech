@@ -1,0 +1,15 @@
+---
+import Icon from './Icon.astro';
+import { site } from '../data/courses';
+---
+<section class="closing" aria-labelledby="cl-t">
+  <div class="wrap reveal">
+    <div class="eyebrow">Tu siguiente paso</div>
+    <h2 id="cl-t">Del conocimiento a los resultados.</h2>
+    <p>Crea tu cuenta y empieza con los programas gratuitos.</p>
+    <form class="join" action={`${site.base}/registro`} method="get">
+      <label><input type="email" name="email" placeholder=" " autocomplete="email" required><span>Correo electrónico</span></label>
+      <button class="btn btn-primary" type="submit">Empezar <Icon name="arrow-right" /></button>
+    </form>
+  </div>
+</section>

@@ -1,0 +1,59 @@
+---
+import CourseCard from './CourseCard.astro';
+import Icon from './Icon.astro';
+import { courses, categories, site } from '../data/courses';
+const n = courses.length;
+---
+<section class="row row-first" id="programas" aria-labelledby="programas-t">
+  <div class="wrap">
+    <div class="row-head">
+      <div>
+        <h2 id="programas-t">Empieza gratis</h2>
+        <p>Cursos con profesionales que aplican lo que enseñan.</p>
+      </div>
+      <div class="tools">
+        <div class="chips" role="group" aria-label="Filtrar por especialidad">
+          {categories.map((c, i) => <button class="chip" data-filter={c.id} aria-pressed={i === 0 ? 'true' : 'false'}>{c.label}</button>)}
+        </div>
+        <label class="search"><Icon name="search" /><input type="search" id="q" placeholder="Buscar curso" aria-label="Buscar curso o docente" /></label>
+      </div>
+    </div>
+    <div class="rail">
+      {courses.map((c) => <CourseCard course={c} />)}
+      <div class="empty" hidden>No encontramos cursos con esa búsqueda. Prueba otra palabra o especialidad.</div>
+    </div>
+    <div class="row-foot">
+      <span id="count" role="status">{n} {n === 1 ? 'curso' : 'cursos'}</span>
+      <a class="link" href={`${site.base}/programas`}>Ver catálogo completo <Icon name="arrow-right" /></a>
+    </div>
+  </div>
+</section>
+
+<script>
+  const cards = [...document.querySelectorAll<HTMLElement>('.card')];
+  const chips = [...document.querySelectorAll<HTMLButtonElement>('.chip')];
+  const q = document.getElementById('q') as HTMLInputElement;
+  const empty = document.querySelector<HTMLElement>('.rail .empty')!;
+  const count = document.getElementById('count')!;
+  let cat = 'all';
+  const norm = (t: string) => t.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+  const filter = () => {
+    const s = norm(q.value.trim());
+    let n = 0;
+    cards.forEach((c) => {
+      const ok = (cat === 'all' || c.dataset.category === cat) && norm(c.textContent || '').includes(s);
+      c.hidden = !ok;
+      if (ok) n++;
+    });
+    empty.hidden = n > 0;
+    count.textContent = `${n} ${n === 1 ? 'curso' : 'cursos'}`;
+  };
+  chips.forEach((b) =>
+    b.addEventListener('click', () => {
+      cat = b.dataset.filter!;
+      chips.forEach((c) => c.setAttribute('aria-pressed', String(c === b)));
+      filter();
+    })
+  );
+  q.addEventListener('input', filter);
+</script>

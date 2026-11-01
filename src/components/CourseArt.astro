@@ -1,0 +1,16 @@
+---
+// Arte de portada por tema, construido con los gráficos auxiliares del manual.
+// variant="portrait" → cards del mazo · variant="landscape" → catálogo y ficha.
+import type { Theme } from '../data/courses';
+interface Props { theme: Theme; variant?: 'portrait' | 'landscape' }
+const { theme, variant = 'landscape' } = Astro.props;
+
+const portrait: Record<Theme, string> = {
+  ads: '<g fill="none" stroke="#15181b" stroke-opacity=".16" stroke-width="1.5"><circle cx="220" cy="120" r="64"/><circle cx="220" cy="120" r="104"/><circle cx="220" cy="120" r="144"/></g><rect x="174" y="74" width="92" height="92" rx="20" fill="#15181b" fill-opacity=".1"/><rect x="120" y="196" width="160" height="22" rx="11" fill="#15181b" fill-opacity=".08"/>',
+  data: '<g fill="#59a9d1"><rect x="132" y="160" width="26" height="70" rx="13" fill-opacity=".2"/><rect x="172" y="125" width="26" height="105" rx="13" fill-opacity=".3"/><rect x="212" y="90" width="26" height="140" rx="13" fill-opacity=".42"/><rect x="252" y="50" width="26" height="180" rx="13" fill-opacity=".55"/></g><polyline points="70,200 145,150 185,165 225,105 265,62" fill="none" stroke="#59a9d1" stroke-width="2"/><rect x="255" y="52" width="20" height="20" rx="5" fill="#edc430"/>',
+  video: '<g fill="none" stroke="#172c36" stroke-width="1.5"><circle cx="205" cy="120" r="46" stroke-opacity=".32"/><circle cx="205" cy="120" r="86" stroke-opacity=".2"/><circle cx="205" cy="120" r="126" stroke-opacity=".12"/></g><path d="M192 98 L228 120 L192 142 Z" fill="#172c36" fill-opacity=".25" stroke="#172c36" stroke-opacity=".25" stroke-width="8" stroke-linejoin="round"/><rect x="80" y="222" width="200" height="8" rx="4" fill="#172c36" fill-opacity=".15"/><rect x="80" y="222" width="120" height="8" rx="4" fill="#172c36" fill-opacity=".32"/><rect x="192" y="216" width="20" height="20" rx="5" fill="#edc430"/>',
+};
+---
+{variant === 'portrait'
+  ? <svg viewBox="0 0 300 400" preserveAspectRatio="xMidYMid slice" aria-hidden="true" set:html={portrait[theme]} />
+  : <svg class="shapes" aria-hidden="true"><use href={`#sh-${theme}`} /></svg>}

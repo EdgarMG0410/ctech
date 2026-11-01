@@ -1,0 +1,27 @@
+---
+import type { Course } from '../data/courses';
+import CourseArt from './CourseArt.astro';
+import Icon from './Icon.astro';
+interface Props { course: Course }
+const { course: c } = Astro.props;
+---
+<article class="card" data-category={c.category}>
+  <div class:list={['art', c.theme]}>
+    <CourseArt theme={c.theme} />
+    <span class="art-badge"><span class="mod"></span>C TECH</span>
+    {c.free && <span class="art-free">GRATIS</span>}
+    <h3 set:html={c.tagline.replace('\n', '<br>')} />
+    <div class="art-actions">
+      <a class="round solid" href={c.url} aria-label={`Ir al curso ${c.title}`}><Icon name="arrow-right" /></a>
+      <button class="round" data-open={c.id} aria-label={`Más información de ${c.title}`}><Icon name="chevron-down" /></button>
+    </div>
+  </div>
+  <div class="info">
+    <div class="meta">
+      {c.free && <><span class="free">Gratis</span><i></i></>}
+      <span>{c.specialty}</span><i></i><span>{c.level}</span>
+    </div>
+    <h4>{c.title}</h4>
+    <p>Con {c.teacher}</p>
+  </div>
+</article>

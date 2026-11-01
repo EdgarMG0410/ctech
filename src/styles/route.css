@@ -1,0 +1,10 @@
+/* Route (numerals) */
+.route{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.step{position:relative;display:grid;grid-template-columns:auto 1fr;align-items:end;min-height:230px;border-radius:var(--r);overflow:hidden;background:var(--panel);transition:background .3s}
+.step:hover{background:var(--panel-2)}
+.num{font-size:clamp(130px,11vw,200px);line-height:.78;font-weight:800;letter-spacing:-.08em;color:var(--bg);-webkit-text-stroke:2px rgba(255,255,255,.26);margin:0 6px -10px 14px;transition:-webkit-text-stroke-color .3s}
+.step:hover .num{-webkit-text-stroke-color:var(--yellow)}
+.step-copy{padding:26px 24px 26px 10px;align-self:stretch;display:flex;flex-direction:column;justify-content:flex-end}
+.step-copy small{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--yellow);font-weight:600}
+.step-copy h3{margin:10px 0 8px;font-size:20px;font-weight:600;letter-spacing:-.025em;line-height:1.25}
+.step-copy p{margin:0;font-size:14px;color:var(--muted);line-height:1.6}

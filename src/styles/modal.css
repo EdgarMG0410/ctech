@@ -1,0 +1,28 @@
+/* Modal */
+dialog{padding:0;border:0;border-radius:12px;background:var(--bg-2);color:var(--text);width:min(860px,calc(100% - 32px));max-height:calc(100svh - 48px);overflow:auto;box-shadow:0 40px 120px rgba(0,0,0,.7)}
+dialog::backdrop{background:rgba(0,0,0,.72);backdrop-filter:blur(4px)}
+dialog[open]{animation:pop .45s var(--ease)}
+.m-hero{position:relative;aspect-ratio:16/7.2;border-radius:0;overflow:hidden}
+.m-hero .art{position:absolute;inset:0;aspect-ratio:auto;border-radius:0;box-shadow:none}
+.m-hero:after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,var(--bg-2) 0%,transparent 26%)}
+.m-hero .art h3{font-size:clamp(34px,5vw,58px);left:32px;bottom:64px;z-index:2}
+.m-close{position:absolute;top:16px;right:16px;z-index:5;width:40px;height:40px;border-radius:50%;background:rgba(11,13,14,.75);display:grid;place-items:center;color:#fff}
+.m-close:hover{background:#000}
+.m-body{padding:0 32px 36px;position:relative;z-index:2;margin-top:-34px}
+.m-actions{display:flex;gap:10px;align-items:center;margin-bottom:24px}
+.m-grid{display:grid;grid-template-columns:1.6fr 1fr;gap:32px}
+.m-grid h2{font-size:26px;letter-spacing:-.03em;font-weight:600;margin:12px 0 10px;line-height:1.2}
+.m-grid p{color:#c9cdd0;font-size:16px;margin:0}
+.m-side{font-size:14px;color:var(--muted);display:grid;gap:10px;align-content:start;padding-top:12px}
+.m-side b{color:var(--dim);font-weight:500}
+.m-side span{color:#e3e6e8}
+.m-more{margin-top:34px;padding-top:26px;border-top:1px solid var(--line)}
+.m-more h3{font-size:18px;font-weight:600;margin:0 0 16px;letter-spacing:-.02em}
+.m-more-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.mini{display:flex;gap:14px;align-items:center;padding:10px;border-radius:8px;background:var(--panel);text-align:left;transition:background .2s}
+.mini:hover{background:var(--panel-2)}
+.mini .art{width:120px;flex:none;border-radius:6px}
+.mini .art h3{font-size:15px;left:10px;bottom:8px}
+.mini .art .art-badge,.mini .art .art-free{display:none}
+.mini strong{display:block;font-size:15px;font-weight:600;letter-spacing:-.015em;line-height:1.3}
+.mini small{color:var(--muted);font-size:13px}

@@ -1,0 +1,61 @@
+---
+import type { Course } from '../data/courses';
+import CourseArt from './CourseArt.astro';
+import Icon from './Icon.astro';
+interface Props { courses: Course[] }
+const { courses } = Astro.props;
+---
+<dialog id="course-modal" aria-label="Ficha del curso">
+  <button class="m-close" aria-label="Cerrar"><Icon name="close" /></button>
+  <div class="m-content"></div>
+</dialog>
+
+{courses.map((c) => (
+  <template data-course={c.id}>
+    <div class="m-hero">
+      <div class:list={['art', c.theme]}>
+        <CourseArt theme={c.theme} />
+        <span class="art-badge"><span class="mod"></span>C TECH</span>
+        <h3 set:html={c.tagline.replace('\n', '<br>')} />
+      </div>
+    </div>
+    <div class="m-body">
+      <div class="m-actions">
+        <a class="btn btn-primary" href={c.url}>Ir al curso <Icon name="arrow-right" /></a>
+      </div>
+      <div class="m-grid">
+        <div>
+          <div class="meta">
+            {c.free && <><span class="free">Gratis</span><i></i></>}
+            <span>{c.specialty}</span><i></i><span class="tag">{c.level.toUpperCase()}</span>
+          </div>
+          <h2>{c.title}</h2>
+          <p>{c.description}</p>
+        </div>
+        <div class="m-side">
+          <div><b>Docente:</b> <span>{c.teacher}</span></div>
+          <div><b>Especialidad:</b> <span>{c.specialty}</span></div>
+          <div><b>Nivel:</b> <span>{c.level}</span></div>
+        </div>
+      </div>
+      <div class="m-more">
+        <h3>Más cursos</h3>
+        <div class="m-more-grid">
+          {courses.filter((o) => o.id !== c.id).map((o) => (
+            <button class="mini" data-open={o.id}>
+              <div class:list={['art', o.theme]}>
+                <CourseArt theme={o.theme} />
+                <h3 set:html={o.tagline.replace('\n', '<br>')} />
+              </div>
+              <div><strong>{o.title}</strong><small>Con {o.teacher}</small></div>
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  </template>
+))}
+
+<script>
+  import '../scripts/modal';
+</script>

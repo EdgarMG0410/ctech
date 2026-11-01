@@ -1,0 +1,16 @@
+---
+import Icon from './Icon.astro';
+import { site } from '../data/courses';
+---
+<section class="faq" id="preguntas" aria-labelledby="faq-t">
+  <div class="wrap">
+    <h2 id="faq-t">Preguntas frecuentes</h2>
+    <div class="faq-list">
+      <details><summary>¿Por dónde empiezo si soy nuevo en marketing?</summary><p>Empieza con “Trafficker Digital Desde 0”. Revisa su ficha para conocer el contenido y confirmar que se ajusta a lo que buscas.</p></details>
+      <details><summary>¿Dónde veo la duración y la modalidad?</summary><p>En la ficha de cada programa. Si necesitas confirmar horarios, duración o modalidad, <a href={`${site.base}/contacto`}>escríbele al equipo de C Tech</a> antes de inscribirte.</p></details>
+      <details><summary>¿Qué documento recibo al terminar?</summary><p>Consulta la ficha del programa y la <a href={`${site.base}/acreditacion`}>información de validez oficial</a> para confirmar qué documento se entrega y su alcance.</p></details>
+      <details><summary>¿Pueden capacitar a mi equipo?</summary><p>Sí. Diseñamos capacitación adaptada a las necesidades de tu equipo. <a href={`${site.base}/contacto`}>Solicita una propuesta</a> para revisar los objetivos de tu empresa.</p></details>
+    </div>
+    <div class="faq-more"><a class="link" href={`${site.base}/preguntas-frecuentes`}>Ver todas las preguntas <Icon name="arrow-right" /></a></div>
+  </div>
+</section>

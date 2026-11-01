@@ -1,0 +1,35 @@
+---
+import Icon from './Icon.astro';
+import { site } from '../data/courses';
+---
+<section class="enterprise" id="empresas" aria-labelledby="ent-t">
+  <div class="wrap">
+    <div class="ent reveal">
+      <div class="ent-copy">
+        <div class="eyebrow">C Tech para empresas</div>
+        <h2 id="ent-t">Capacitación para equipos que necesitan ejecutar.</h2>
+        <p>Formación adaptada a tu equipo de marketing y ventas, construida sobre escenarios reales de tu negocio.</p>
+        <ul class="ent-list">
+          <li><span class="mod"></span>Diagnóstico de necesidades del equipo</li>
+          <li><span class="mod"></span>Contenido aterrizado a tu operación</li>
+          <li><span class="mod"></span>Aplicación directa en tus proyectos</li>
+        </ul>
+        <div><a class="btn btn-primary" href={`${site.base}/contacto`}>Solicitar propuesta <Icon name="arrow-right" /></a></div>
+      </div>
+      <div class="ent-art" aria-hidden="true">
+        <svg viewBox="0 0 600 440" preserveAspectRatio="xMidYMid slice" fill="none">
+          <g stroke="#59a9d1" stroke-width="1.5"><circle cx="380" cy="220" r="120" stroke-opacity=".3"/><circle cx="380" cy="220" r="190" stroke-opacity=".16"/><circle cx="380" cy="220" r="260" stroke-opacity=".08"/></g>
+          <rect x="200" y="110" width="300" height="64" rx="32" fill="#e2edf2" fill-opacity=".12" stroke="#e2edf2" stroke-opacity=".2"/>
+          <rect x="240" y="188" width="300" height="64" rx="32" fill="#59a9d1" fill-opacity=".28" stroke="#59a9d1" stroke-opacity=".4"/>
+          <rect x="200" y="266" width="300" height="64" rx="32" fill="#e2edf2" fill-opacity=".12" stroke="#e2edf2" stroke-opacity=".2"/>
+          <rect x="216" y="126" width="32" height="32" rx="8" fill="#e2edf2" fill-opacity=".5"/>
+          <rect x="256" y="204" width="32" height="32" rx="8" fill="#edc430"/>
+          <rect x="216" y="282" width="32" height="32" rx="8" fill="#e2edf2" fill-opacity=".5"/>
+          <text x="266" y="148" fill="#e2edf2" fill-opacity=".85" font-family="Metropolis,sans-serif" font-size="15" font-weight="600">Dirección</text>
+          <text x="306" y="226" fill="#ffffff" font-family="Metropolis,sans-serif" font-size="15" font-weight="600">Ejecución</text>
+          <text x="266" y="304" fill="#e2edf2" fill-opacity=".85" font-family="Metropolis,sans-serif" font-size="15" font-weight="600">Aplicación</text>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,28 @@
+---
+import CourseDeck from './CourseDeck.astro';
+import Icon from './Icon.astro';
+import { courses } from '../data/courses';
+const featured = courses.filter((c) => c.featured).slice(0, 3);
+---
+<section class="hero" id="inicio" aria-labelledby="hero-t">
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <div class="eyebrow">Especialízate. Aplica. Evoluciona.</div>
+      <h1 id="hero-t">La escuela para<br />quienes hacen<br /><em>marketing.</em></h1>
+      <p class="lead">Estrategia, publicidad y contenido. Aprende de profesionales en activo y lleva lo aprendido a tus proyectos.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#programas">Explorar cursos <Icon name="arrow-up-right" /></a>
+        <a class="link" href="#ruta">Así se aprende aquí <Icon name="arrow-down" /></a>
+      </div>
+      <p class="hero-note"><span class="mod"></span>Empieza con los cursos gratuitos del catálogo.</p>
+    </div>
+    <CourseDeck courses={featured} />
+  </div>
+  <div class="wrap">
+    <div class="hero-bottom">
+      <span><span class="mod"></span>Especialización en marketing digital</span>
+      <span><span class="mod"></span>Profesionales que enseñan desde la práctica</span>
+      <span><span class="mod"></span>Formación para personas y equipos</span>
+    </div>
+  </div>
+</section>

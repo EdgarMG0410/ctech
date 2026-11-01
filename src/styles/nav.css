@@ -1,0 +1,20 @@
+/* Nav */
+.nav{position:fixed;inset:0 0 auto;z-index:50;transition:background .35s,border-color .35s;border-bottom:1px solid transparent;background:linear-gradient(180deg,rgba(11,13,14,.85),rgba(11,13,14,0))}
+.nav.scrolled{background:rgba(11,13,14,.94);backdrop-filter:blur(16px);border-color:var(--line)}
+.nav-in{height:72px;display:flex;align-items:center;gap:40px}
+.brand{display:flex;align-items:center;gap:11px}
+.brand svg{height:32px;width:auto}
+.brand b{font-size:17px;font-weight:600;letter-spacing:-.03em;line-height:1}
+.brand small{display:block;font-size:10px;letter-spacing:.14em;font-weight:500;color:var(--dim);margin-top:5px;text-transform:uppercase}
+.nav-links{display:flex;gap:26px;font-size:14px;color:#c9cdd0}
+.nav-links a{transition:color .2s;position:relative}
+.nav-links a:hover,.nav-links a.active{color:#fff}
+.nav-links{align-self:stretch;align-items:stretch}
+.nav-links a{display:flex;align-items:center}
+.nav-links a:after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;border-radius:2px 2px 0 0;background:#edc430;transform:scaleX(0);transition:transform .4s cubic-bezier(.22,1,.36,1)}
+.nav-links a.active:after{transform:scaleX(1)}
+.nav-end{margin-left:auto;display:flex;align-items:center;gap:20px;font-size:14px}
+.nav-end .login{color:#c9cdd0}
+.nav-end .login:hover{color:#fff}
+.menu-btn{display:none;width:40px;height:40px;place-items:center}
+.mnav{display:none}

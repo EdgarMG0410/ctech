@@ -1,0 +1,30 @@
+---
+import Base from '../layouts/Base.astro';
+import Nav from '../components/Nav.astro';
+import Hero from '../components/Hero.astro';
+import Catalog from '../components/Catalog.astro';
+import Route from '../components/Route.astro';
+import Statement from '../components/Statement.astro';
+import Enterprise from '../components/Enterprise.astro';
+import Official from '../components/Official.astro';
+import Faq from '../components/Faq.astro';
+import Closing from '../components/Closing.astro';
+import Footer from '../components/Footer.astro';
+import CourseModal from '../components/CourseModal.astro';
+import { courses } from '../data/courses';
+---
+<Base>
+  <Nav />
+  <main id="contenido">
+    <Hero />
+    <Catalog />
+    <Route />
+    <Statement />
+    <Enterprise />
+    <Official />
+    <Faq />
+    <Closing />
+  </main>
+  <Footer />
+  <CourseModal courses={courses} />
+</Base>

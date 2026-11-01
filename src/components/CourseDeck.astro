@@ -1,0 +1,211 @@
+---
+/**
+ * Mazo 3D de cursos.
+ * - Se baraja solo cada 4.2 s (pausa con hover, foco, ficha abierta o fuera de pantalla).
+ * - Arrastra la card del frente a izquierda/derecha, usa las flechas o el teclado.
+ * - Clic en la card del frente → abre la ficha. Clic en una de atrás → la trae al frente.
+ * - Respeta prefers-reduced-motion y el botón "Reducir movimiento".
+ * Sin dependencias: CSS 3D + Web Animations API.
+ */
+import type { Course } from '../data/courses';
+import CoursePoster from './CoursePoster.astro';
+import Icon from './Icon.astro';
+interface Props { courses: Course[] }
+const { courses } = Astro.props;
+const total = String(courses.length).padStart(2, '0');
+---
+<div class="collection">
+  <div class="collection-top"><span>Tu próximo curso</span><span>Colección C Tech</span></div>
+  <div class="stage" aria-roledescription="mazo de cursos" aria-label="Cursos destacados. Usa las flechas para barajar.">
+    <div class="deck">
+      {courses.map((c) => <CoursePoster course={c} />)}
+    </div>
+  </div>
+  <div class="collection-cap">
+    <div class="deck-ctrl">
+      <button class="deck-prev" aria-label="Curso anterior"><Icon name="chevron-left" /></button>
+      <span class="deck-count" aria-live="polite"><b>01</b> / {total}</span>
+      <button class="deck-next" aria-label="Siguiente curso"><Icon name="chevron-right" /></button>
+    </div>
+    <a class="link" href="#programas">Ver todos los cursos <Icon name="arrow-up-right" /></a>
+  </div>
+</div>
+
+<script>
+  import { openCourse, isModalOpen } from '../scripts/modal';
+
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const still = () => reduce || document.body.classList.contains('still');
+
+  type Pose = { t: string; f: string };
+  // Posiciones del mazo: frente, segunda y tercera card (de adelante hacia atrás)
+  const POS: Pose[] = [
+    { t: 'translate3d(0,0,40px) rotateY(0deg) rotateZ(-1.5deg)', f: 'brightness(1)' },
+    { t: 'translate3d(17%,-3%,-150px) rotateY(-16deg) rotateZ(7deg)', f: 'brightness(.6)' },
+    { t: 'translate3d(-17%,-1%,-280px) rotateY(16deg) rotateZ(-8deg)', f: 'brightness(.42)' },
+  ];
+  const OUT = {
+    next: 'translate3d(82%,-8%,90px) rotateY(-32deg) rotateZ(18deg)',
+    prev: 'translate3d(-82%,-8%,90px) rotateY(32deg) rotateZ(-18deg)',
+  };
+  const poseAt = (i: number) => POS[Math.min(i, POS.length - 1)];
+
+  document.querySelectorAll<HTMLElement>('.collection').forEach((col) => {
+    const stage = col.querySelector<HTMLElement>('.stage')!;
+    const deck = col.querySelector<HTMLElement>('.deck')!;
+    const count = col.querySelector<HTMLElement>('.deck-count')!;
+    const initial = [...deck.querySelectorAll<HTMLElement>('.poster')];
+    let order = [...initial];
+    let busy = false;
+    const last = () => poseAt(order.length - 1);
+
+    const paint = (skip?: HTMLElement) => {
+      order.forEach((c, i) => {
+        c.dataset.pos = String(i);
+        if (c !== skip) {
+          c.style.transform = poseAt(i).t;
+          c.style.filter = poseAt(i).f;
+        }
+        c.style.zIndex = String(order.length - i);
+        c.tabIndex = i === 0 ? 0 : -1;
+        c.setAttribute('aria-hidden', String(i !== 0));
+      });
+      const n = initial.indexOf(order[0]) + 1;
+      count.innerHTML = `<b>${String(n).padStart(2, '0')}</b> / ${String(order.length).padStart(2, '0')}`;
+    };
+
+    const fly = (el: HTMLElement, from: Pose, via: string, to: Pose) => {
+      el.style.transform = to.t;
+      el.style.filter = to.f;
+      if (still() || !el.animate) return Promise.resolve();
+      el.classList.add('flying');
+      const a = el.animate(
+        [
+          { transform: from.t, filter: from.f },
+          { transform: via, filter: 'brightness(1)', offset: 0.42 },
+          { transform: to.t, filter: to.f },
+        ],
+        { duration: 900, easing: 'cubic-bezier(.45,.05,.2,1)' }
+      );
+      const done = () => el.classList.remove('flying');
+      return a.finished.then(done, done);
+    };
+
+    const next = (fromT?: string) => {
+      if (busy || order.length < 2) return;
+      busy = true;
+      const f = order.shift()!;
+      order.push(f);
+      paint(f);
+      fly(f, { t: fromT || POS[0].t, f: POS[0].f }, OUT.next, last()).then(() => (busy = false));
+    };
+    const prev = () => {
+      if (busy || order.length < 2) return;
+      busy = true;
+      const l = order.pop()!;
+      order.unshift(l);
+      paint(l);
+      fly(l, last(), OUT.prev, POS[0]).then(() => (busy = false));
+    };
+
+    // Entrada: reparto de cartas
+    paint();
+    if (!still()) {
+      order.forEach((c, i) =>
+        c.animate(
+          [
+            { transform: 'translate3d(0,40%,-400px) rotateX(40deg)', filter: 'brightness(.3)', opacity: 0 },
+            { transform: poseAt(i).t, filter: poseAt(i).f, opacity: 1 },
+          ],
+          { duration: 1100, delay: 250 + (order.length - 1 - i) * 140, easing: 'cubic-bezier(.22,1,.36,1)', fill: 'backwards' }
+        )
+      );
+    }
+    deck.classList.add('ready');
+
+    // Controles
+    col.querySelector('.deck-next')!.addEventListener('click', () => { next(); auto(); });
+    col.querySelector('.deck-prev')!.addEventListener('click', () => { prev(); auto(); });
+    col.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') { next(); auto(); }
+      if (e.key === 'ArrowLeft') { prev(); auto(); }
+    });
+
+    // Arrastrar / clic
+    let drag: { c: HTMLElement; x: number; dx: number; front: boolean } | null = null;
+    deck.addEventListener('pointerdown', (e) => {
+      const c = (e.target as HTMLElement).closest<HTMLElement>('.poster');
+      if (!c || busy) return;
+      drag = { c, x: e.clientX, dx: 0, front: c.dataset.pos === '0' };
+      if (drag.front) c.setPointerCapture(e.pointerId);
+    });
+    deck.addEventListener('pointermove', (e) => {
+      if (!drag || !drag.front) return;
+      drag.dx = e.clientX - drag.x;
+      if (Math.abs(drag.dx) > 4) {
+        const dx = drag.dx;
+        drag.c.classList.add('dragging');
+        drag.c.style.transform = `translate3d(${dx}px,${-Math.abs(dx) * 0.05}px,${40 + Math.min(Math.abs(dx) * 0.4, 60)}px) rotateY(${-dx * 0.04}deg) rotateZ(${dx * 0.03 - 1.5}deg)`;
+      }
+    });
+    const end = () => {
+      if (!drag) return;
+      const { c, dx, front } = drag;
+      drag = null;
+      c.classList.remove('dragging');
+      if (front && Math.abs(dx) > 80) {
+        if (dx > 0) next(c.style.transform);
+        else { c.style.transform = POS[0].t; prev(); }
+        auto();
+        return;
+      }
+      if (front && Math.abs(dx) > 4) { c.style.transform = POS[0].t; return; }
+      if (front) openCourse(c.dataset.id!);
+      else { c.dataset.pos === '1' ? next() : prev(); auto(); }
+    };
+    deck.addEventListener('pointerup', end);
+    deck.addEventListener('pointercancel', end);
+    deck.addEventListener('keydown', (e) => {
+      if ((e.key === 'Enter' || e.key === ' ') && (e.target as HTMLElement).closest('.poster')) {
+        e.preventDefault();
+        openCourse(order[0].dataset.id!);
+      }
+    });
+
+    // Inclinación 3D con el mouse
+    col.addEventListener('pointermove', (e) => {
+      if (still() || e.pointerType !== 'mouse') return;
+      const r = stage.getBoundingClientRect();
+      const x = (e.clientX - r.left) / r.width - 0.5;
+      const y = (e.clientY - r.top) / r.height - 0.5;
+      deck.style.setProperty('--ry', (x * 14).toFixed(2) + 'deg');
+      deck.style.setProperty('--rx', (-y * 10).toFixed(2) + 'deg');
+      deck.style.setProperty('--shine', (x * 120).toFixed(1));
+    });
+    col.addEventListener('pointerleave', () => {
+      deck.style.setProperty('--ry', '0deg');
+      deck.style.setProperty('--rx', '0deg');
+      deck.style.setProperty('--shine', '-60');
+    });
+    deck.style.setProperty('--shine', '-60');
+
+    // Autobarajeo
+    let timer: number | undefined;
+    let hover = false;
+    let visible = true;
+    function auto() {
+      clearInterval(timer);
+      if (still()) return;
+      timer = window.setInterval(() => {
+        if (!hover && visible && !document.hidden && !isModalOpen()) next();
+      }, 4200);
+    }
+    col.addEventListener('mouseenter', () => (hover = true));
+    col.addEventListener('mouseleave', () => (hover = false));
+    col.addEventListener('focusin', () => (hover = true));
+    col.addEventListener('focusout', () => (hover = false));
+    new IntersectionObserver((es) => (visible = es[0].isIntersecting)).observe(stage);
+    document.addEventListener('motionchange', auto);
+    auto();
+  });
+</script>
