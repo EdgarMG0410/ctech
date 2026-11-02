@@ -1,4 +1,5 @@
 /* Modal — ficha compacta, sin scroll */
+.m-actions{display:flex;align-items:center;gap:16px;margin-top:auto;padding-top:24px}
 dialog{padding:0;border:0;border-radius:14px;background:var(--bg-2);color:var(--text);width:min(820px,calc(100% - 32px));max-height:calc(100svh - 32px);overflow:hidden;box-shadow:0 0 0 1px rgba(255,255,255,.08),0 40px 120px rgba(0,0,0,.7)}
 dialog::backdrop{background:rgba(0,0,0,.72);backdrop-filter:blur(4px)}
 dialog[open]{animation:pop .45s var(--ease)}
@@ -17,11 +18,5 @@ dialog[open]{animation:pop .45s var(--ease)}
 .m-facts{display:grid;grid-template-columns:1fr auto;gap:16px;margin:22px 0 0;padding:16px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
 .m-facts dt{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);font-weight:600;margin-bottom:4px}
 .m-facts dd{margin:0;font-size:14px;color:#e3e6e8;line-height:1.35}
-.m-actions{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:auto;padding-top:24px;flex-wrap:wrap}
-.m-nav{display:flex;align-items:center;gap:8px}
-.m-step{width:38px;height:38px;border-radius:50%;border:1px solid rgba(255,255,255,.2);display:grid;place-items:center;transition:.2s}
-.m-step:hover{border-color:var(--yellow);color:var(--yellow)}
-.m-step .ico{width:16px;height:16px}
-.m-count{font-size:13px;color:var(--muted);min-width:38px;text-align:center;font-variant-numeric:tabular-nums}
+
 .m-content{animation:none;outline:0}
-.m-content.swap{animation:rise .4s var(--ease)}

@@ -1,24 +1,19 @@
 ---
 /**
  * Ficha de curso compacta (sin scroll): arte a la izquierda, información a la derecha.
- * Las flechas ‹ › recorren los demás cursos sin cerrar la ficha.
  */
 import type { Course } from '../data/courses';
 import CourseArt from './CourseArt.astro';
 import Icon from './Icon.astro';
 interface Props { courses: Course[] }
 const { courses } = Astro.props;
-const n = courses.length;
 ---
 <dialog id="course-modal" aria-label="Ficha del curso">
   <button class="m-close" aria-label="Cerrar"><Icon name="close" /></button>
   <div class="m-content" tabindex="-1" autofocus></div>
 </dialog>
 
-{courses.map((c, i) => {
-  const prev = courses[(i - 1 + n) % n];
-  const next = courses[(i + 1) % n];
-  return (
+{courses.map((c) => (
     <template data-course={c.id}>
       <div class="m-wrap">
         <div class:list={['m-art', 'art', c.theme]}>
@@ -39,19 +34,11 @@ const n = courses.length;
           </dl>
           <div class="m-actions">
             <a class="btn btn-primary" href={c.url}>Ir al curso <Icon name="arrow-right" /></a>
-            {n > 1 && (
-              <div class="m-nav">
-                <button class="m-step" data-open={prev.id} aria-label={`Curso anterior: ${prev.title}`}><Icon name="chevron-left" /></button>
-                <span class="m-count">{i + 1} / {n}</span>
-                <button class="m-step" data-open={next.id} aria-label={`Siguiente curso: ${next.title}`}><Icon name="chevron-right" /></button>
-              </div>
-            )}
           </div>
         </div>
       </div>
     </template>
-  );
-})}
+))}
 
 <script>
   import '../scripts/modal';

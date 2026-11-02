@@ -11,14 +11,7 @@ export function openCourse(id: string) {
   const tpl = document.querySelector<HTMLTemplateElement>(`template[data-course="${id}"]`);
   if (!dlg || !tpl) return;
   const body = dlg.querySelector('.m-content')!;
-  const active = document.activeElement as HTMLElement | null;
-  const stepIndex = active?.classList.contains('m-step') ? [...dlg.querySelectorAll('.m-step')].indexOf(active) : -1;
   body.replaceChildren(tpl.content.cloneNode(true));
-  body.classList.remove('swap');
-  void (body as HTMLElement).offsetWidth;
-  if (dlg.open) body.classList.add('swap');
-  // Si se navegó con las flechas, el foco se queda en la misma flecha
-  if (stepIndex >= 0) dlg.querySelectorAll<HTMLElement>('.m-step')[stepIndex]?.focus({ preventScroll: true });
   if (!dlg.open) {
     opener = document.activeElement as HTMLElement;
     dlg.showModal();
