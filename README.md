@@ -40,6 +40,7 @@ El sitio es estático y se publica como **Worker con assets estáticos** (`wrang
 
 Todo sale de **`src/data/courses.ts`**. Agrega un objeto al arreglo `courses` y aparece en:
 
+- el menú **Programas** del nav
 - el mazo 3D del hero (si `featured: true`; se muestran hasta 3)
 - el catálogo, con filtro y búsqueda
 - la ficha modal
@@ -59,6 +60,7 @@ src/
   pages/programas/[slug]   ← página de cada curso
   components/
     Nav.astro              ← menú fijo con subrayado amarillo en la sección activa
+    NavPrograms.astro      ← lista de programas del desplegable y del menú móvil
     Hero.astro             ← titular + mazo
     CourseDeck.astro       ← mazo 3D (barajeo, arrastre, teclado, inclinación)
     CoursePoster.astro     ← card vertical del mazo

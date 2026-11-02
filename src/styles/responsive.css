@@ -16,9 +16,18 @@
   .collection{max-width:560px;width:100%;margin-inline:auto}
   .hero-bottom span:last-child{display:none}
   .nav-in{gap:16px}
-  .mnav.open{display:grid;gap:4px;padding:8px var(--gutter) 20px;background:rgba(11,13,14,.97);border-bottom:1px solid var(--line)}
+  .mnav.open{display:grid;gap:4px;padding:8px var(--gutter) 20px;background:rgba(11,13,14,.97);border-bottom:1px solid var(--line);max-height:calc(100dvh - 72px);overflow:auto}
   .mnav a{padding:12px 0;font-size:17px;border-bottom:1px solid var(--line)}
   .mnav a:last-child{border:0}
+  .mnav-drop{border-bottom:1px solid var(--line)}
+  .mnav-drop summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;padding:12px 0;font-size:17px}
+  .mnav-drop summary::-webkit-details-marker{display:none}
+  .mnav-drop summary .ico{width:18px;height:18px;color:var(--muted);transition:transform .3s var(--ease)}
+  .mnav-drop[open] summary .ico{transform:rotate(180deg)}
+  .mnav-drop .np-list{padding-left:12px}
+  .mnav .np-item{padding:10px 0;border:0}
+  .mnav .np-item b{font-size:15px}
+  .mnav .np-all{margin:6px 0 8px 12px;padding:12px 0 0;font-size:14px}
   .rail,.route{grid-auto-flow:column;grid-template-columns:none;grid-auto-columns:minmax(78%,1fr);overflow-x:auto;scroll-snap-type:x mandatory;margin-inline:calc(var(--gutter)*-1);padding-inline:var(--gutter);scroll-padding-inline:var(--gutter);padding-bottom:12px;scrollbar-width:none}
   .rail::-webkit-scrollbar,.route::-webkit-scrollbar{display:none}
   .card,.step{scroll-snap-align:start}

@@ -9,7 +9,7 @@
  *   - 'video' → Flujo digital        (#e2edf2 → #59a9d1)
  */
 export type Theme = 'ads' | 'data' | 'video';
-export type Category = 'publicidad' | 'medicion' | 'contenido';
+export type Category = 'publicidad' | 'medicion' | 'ventas' | 'contenido';
 
 export interface Module {
   title: string;
@@ -86,6 +86,25 @@ export const courses: Course[] = [
     featured: true,
   },
   {
+    id: 'marketing-digital-inmobiliario',
+    theme: 'video',
+    category: 'publicidad',
+    label: 'Inmobiliario',
+    specialty: 'Marketing inmobiliario',
+    tag: 'Meta Ads e IA',
+    level: 'Básico',
+    tagline: 'Vende sin\nportales.',
+    title: 'Marketing Digital Inmobiliario',
+    teacher: 'Carlos Guillermo González García',
+    teacherBio: '10 años en venta de inmuebles de alto valor; dueño de Elvian High Performance Marketing.',
+    description:
+      'El sistema completo para que un asesor inmobiliario venda propiedades con Meta Ads, IA y WhatsApp, sin depender de portales como Inmuebles24.',
+    vsl: 'https://www.youtube.com/watch?v=aqz-KE-bpKQ', // TODO: video temporal
+    modules: [{ title: 'Inicio', lessons: [] }],
+    price: 0,
+    publishedAt: '2026-09-26',
+  },
+  {
     id: 'medicion-tracking-meta-ads',
     theme: 'data',
     category: 'medicion',
@@ -116,6 +135,27 @@ export const courses: Course[] = [
     featured: true,
   },
   {
+    id: 'arquitectura-de-ventas',
+    theme: 'ads',
+    category: 'ventas',
+    label: 'Ventas',
+    specialty: 'Ventas y estrategia comercial',
+    tag: 'Ventas',
+    level: 'Intermedio',
+    tagline: 'Ventas con\nestructura.',
+    title: 'Arquitectura de Ventas',
+    teacher: 'Sergio Alberto Hernández San Martín',
+    teacherBio: '15 años en ventas y estrategia comercial; dueño de agencia RifateHoy.',
+    description: 'Arquitectura de Ventas, programa de C Tech Consulting.', // TODO: descripción real
+    vsl: 'https://www.youtube.com/watch?v=aqz-KE-bpKQ', // TODO: video temporal
+    modules: [
+      { title: 'Módulo 1', lessons: [] },
+      { title: 'Módulo 2', lessons: [] },
+    ],
+    price: 0,
+    publishedAt: '2026-09-26',
+  },
+  {
     id: 'creacion-y-edicion-de-videomarketing',
     theme: 'video',
     category: 'contenido',
@@ -141,6 +181,7 @@ export const categories: { id: Category | 'all'; label: string }[] = [
   { id: 'all', label: 'Todos' },
   { id: 'publicidad', label: 'Publicidad' },
   { id: 'medicion', label: 'Medición' },
+  { id: 'ventas', label: 'Ventas' },
   { id: 'contenido', label: 'Contenido' },
 ];
 
@@ -166,6 +207,9 @@ export const stats = (c: Course) => {
   const minutes = modules.reduce((n, m) => n + m.lessons.reduce((s, l) => s + l.minutes, 0), 0);
   return { modules: modules.length, lessons, minutes };
 };
+
+export const lessonsLabel = (n: number) => `${n} ${n === 1 ? 'lección' : 'lecciones'}`;
+export const modulesLabel = (n: number) => `${n} ${n === 1 ? 'módulo' : 'módulos'}`;
 
 export const formatMinutes = (min: number) => {
   const h = Math.floor(min / 60);

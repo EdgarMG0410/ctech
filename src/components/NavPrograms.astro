@@ -1,0 +1,24 @@
+---
+/**
+ * Lista de programas del menú: se usa en el desplegable de escritorio y en el menú móvil.
+ */
+import { courses, site, type Course, courseUrl, stats, lessonsLabel, modulesLabel } from '../data/courses';
+import Icon from './Icon.astro';
+
+const detail = (c: Course) => {
+  const s = stats(c);
+  if (!s.modules) return c.teacher;
+  return s.lessons ? `${modulesLabel(s.modules)} · ${lessonsLabel(s.lessons)}` : modulesLabel(s.modules);
+};
+---
+<ul class="np-list">
+  {courses.map((c) => (
+    <li>
+      <a class="np-item" href={courseUrl(c)}>
+        <b>{c.title}</b>
+        <span class="np-meta"><span class:list={['np-level', { hi: c.level !== 'Básico' }]}>{c.level}</span>{detail(c)}</span>
+      </a>
+    </li>
+  ))}
+</ul>
+<a class="np-all" href={`${site.base}/programas`}>Ver el catálogo completo <Icon name="arrow-right" /></a>

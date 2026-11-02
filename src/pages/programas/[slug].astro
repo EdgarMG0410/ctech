@@ -12,7 +12,7 @@ import CourseVideo from '../../components/CourseVideo.astro';
 import Icon from '../../components/Icon.astro';
 import {
   courses, site, type Course, buyUrl, ctaLabel, priceLabel, isFree,
-  stats, formatMinutes, formatDate,
+  stats, lessonsLabel, modulesLabel, formatMinutes, formatDate,
 } from '../../data/courses';
 
 export function getStaticPaths() {
@@ -22,12 +22,10 @@ export function getStaticPaths() {
 interface Props { course: Course }
 const { course: c } = Astro.props;
 const s = stats(c);
-const hasSyllabus = s.modules > 0;
+const hasSyllabus = s.lessons > 0;
 const others = courses.filter((o) => o.id !== c.id);
 const words = c.teacher.split(' ');
 const initials = (words[0][0] + (words.length >= 3 ? words[words.length - 2][0] : words[1]?.[0] ?? '')).toUpperCase();
-const lessonsLabel = (n: number) => `${n} ${n === 1 ? 'lección' : 'lecciones'}`;
-const modulesLabel = (n: number) => `${n} ${n === 1 ? 'módulo' : 'módulos'}`;
 ---
 <Base title={`${c.title} — C Tech Consulting`} description={c.description}>
   <Nav active="programas" />

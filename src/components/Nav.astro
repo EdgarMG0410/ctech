@@ -1,6 +1,7 @@
 ---
 import Brand from './Brand.astro';
 import Icon from './Icon.astro';
+import NavPrograms from './NavPrograms.astro';
 import { site } from '../data/courses';
 interface Props { active?: string }
 const { active = 'inicio' } = Astro.props;
@@ -16,7 +17,17 @@ const links = [
   <div class="wrap nav-in">
     <Brand />
     <nav class="nav-links" aria-label="Principal">
-      {links.map((l, i) => <a href={l.href} class:list={{ active: l.href === `/#${active}` }}>{l.label}</a>)}
+      {links.map((l) => l.href === '/#programas' ? (
+        <div class="nav-drop">
+          <a href={l.href} class:list={['nav-link', { active: l.href === `/#${active}` }]} aria-expanded="false" aria-controls="nav-programas">{l.label}<Icon name="chevron-down" /></a>
+          <div class="nav-panel" id="nav-programas" hidden>
+            <p class="np-title">Programas educativos</p>
+            <NavPrograms />
+          </div>
+        </div>
+      ) : (
+        <a href={l.href} class:list={['nav-link', { active: l.href === `/#${active}` }]}>{l.label}</a>
+      ))}
     </nav>
     <div class="nav-end">
       <a class="login" href={`${site.base}/iniciar-sesion`}>Iniciar sesión</a>
@@ -25,7 +36,12 @@ const links = [
     </div>
   </div>
   <nav class="mnav" id="mnav" aria-label="Menú móvil" inert>
-    {links.slice(1).map((l) => <a href={l.href}>{l.label}</a>)}
+    {links.slice(1).map((l) => l.href === '/#programas' ? (
+      <details class="mnav-drop">
+        <summary>{l.label}<Icon name="chevron-down" /></summary>
+        <NavPrograms />
+      </details>
+    ) : <a href={l.href}>{l.label}</a>)}
     <a href={`${site.base}/iniciar-sesion`}>Iniciar sesión</a>
   </nav>
 </header>
@@ -48,8 +64,45 @@ const links = [
   btn.addEventListener('click', () => setMenu(btn.getAttribute('aria-expanded') !== 'true'));
   mnav.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setMenu(false)));
 
+  // Desplegable de programas
+  const dropWrap = nav.querySelector<HTMLElement>('.nav-drop')!;
+  const drop = dropWrap.querySelector<HTMLAnchorElement>('.nav-link')!;
+  const panel = document.getElementById('nav-programas')!;
+  const setDrop = (open: boolean) => {
+    panel.hidden = !open;
+    drop.setAttribute('aria-expanded', String(open));
+  };
+  let closing = 0;
+  dropWrap.addEventListener('pointerenter', (e) => {
+    if (e.pointerType !== 'mouse') return;
+    clearTimeout(closing);
+    setDrop(true);
+  });
+  dropWrap.addEventListener('pointerleave', (e) => {
+    if (e.pointerType === 'mouse') closing = window.setTimeout(() => setDrop(false), 200);
+  });
+  drop.addEventListener('click', (e) => {
+    e.preventDefault();
+    setDrop(panel.hidden);
+  });
+  panel.addEventListener('click', (e) => {
+    if ((e.target as HTMLElement).closest('a')) setDrop(false);
+  });
+  document.addEventListener('click', (e) => {
+    if (!dropWrap.contains(e.target as Node)) setDrop(false);
+  });
+  dropWrap.addEventListener('focusout', (e) => {
+    const next = e.relatedTarget as Node | null;
+    if (next && !dropWrap.contains(next)) setDrop(false);
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape' || panel.hidden) return;
+    setDrop(false);
+    drop.focus();
+  });
+
   // Subrayado amarillo en la sección activa
-  const links = [...nav.querySelectorAll<HTMLAnchorElement>('.nav-links a')];
+  const links = [...nav.querySelectorAll<HTMLAnchorElement>('.nav-link')];
   const io = new IntersectionObserver(
     (entries) =>
       entries.forEach((e) => {
