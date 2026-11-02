@@ -2,6 +2,7 @@
 .meta{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;font-size:14px;color:var(--muted)}
 .meta .tag{border:1px solid rgba(255,255,255,.35);border-radius:3px;padding:1px 7px;font-size:12px;font-weight:600;letter-spacing:.06em;color:#fff}
 .meta .free{color:var(--yellow);font-weight:600}
+.meta .price{color:var(--text);font-weight:600}
 .meta i{width:3px;height:3px;border-radius:50%;background:var(--dim)}
 
 .row{padding:28px 0 56px;position:relative;z-index:2}

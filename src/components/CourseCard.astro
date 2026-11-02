@@ -1,5 +1,5 @@
 ---
-import type { Course } from '../data/courses';
+import { type Course, courseUrl, isFree, priceLabel } from '../data/courses';
 import CourseArt from './CourseArt.astro';
 import Icon from './Icon.astro';
 interface Props { course: Course }
@@ -9,17 +9,17 @@ const { course: c } = Astro.props;
   <div class:list={['art', c.theme]}>
     <CourseArt theme={c.theme} />
     <span class="art-badge"><span class="mod"></span>C TECH</span>
-    {c.free && <span class="art-free">GRATIS</span>}
+    <span class="art-free">{priceLabel(c).toUpperCase()}</span>
     <h3 set:html={c.tagline.replace('\n', '<br>')} />
     <div class="art-actions">
-      <a class="round solid" href={c.url} aria-label={`Ir al curso ${c.title}`}><Icon name="arrow-right" /></a>
+      <a class="round solid" href={courseUrl(c)} aria-label={`Ir al curso ${c.title}`}><Icon name="arrow-right" /></a>
       <button class="round" data-open={c.id} aria-label={`Más información de ${c.title}`}><Icon name="chevron-down" /></button>
     </div>
   </div>
   <div class="info">
     <div class="meta">
-      {c.free && <><span class="free">Gratis</span><i></i></>}
-      <span>{c.specialty}</span><i></i><span>{c.level}</span>
+      <span class:list={{ free: isFree(c), price: !isFree(c) }}>{priceLabel(c)}</span><i></i>
+      <span>{c.specialty}</span><i></i><span>{c.tag}</span>
     </div>
     <h4>{c.title}</h4>
     <p>Con {c.teacher}</p>

@@ -1,0 +1,218 @@
+---
+/**
+ * Página de curso: /programas/<id>
+ * Se genera una por cada curso de src/data/courses.ts.
+ */
+import Base from '../../layouts/Base.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+import CourseArt from '../../components/CourseArt.astro';
+import CourseCard from '../../components/CourseCard.astro';
+import CourseModal from '../../components/CourseModal.astro';
+import Icon from '../../components/Icon.astro';
+import {
+  courses, site, type Course, buyUrl, ctaLabel, priceLabel, isFree,
+  stats, formatMinutes, formatDate,
+} from '../../data/courses';
+
+export function getStaticPaths() {
+  return courses.map((course) => ({ params: { slug: course.id }, props: { course } }));
+}
+
+interface Props { course: Course }
+const { course: c } = Astro.props;
+const s = stats(c);
+const hasSyllabus = s.modules > 0;
+const others = courses.filter((o) => o.id !== c.id);
+const words = c.teacher.split(' ');
+const initials = (words[0][0] + (words.length >= 3 ? words[words.length - 2][0] : words[1]?.[0] ?? '')).toUpperCase();
+const lessonsLabel = (n: number) => `${n} ${n === 1 ? 'lección' : 'lecciones'}`;
+const modulesLabel = (n: number) => `${n} ${n === 1 ? 'módulo' : 'módulos'}`;
+---
+<Base title={`${c.title} — C Tech Consulting`} description={c.description}>
+  <Nav active="programas" />
+  <main id="contenido" class="cp">
+
+    <!-- ===== Hero del curso ===== -->
+    <section class:list={['cp-hero', `t-${c.theme}`]} aria-labelledby="cp-title">
+      <div class="wrap cp-hero-grid">
+        <div class="cp-copy">
+          <nav class="crumbs" aria-label="Ruta">
+            <a href="/#programas">Programas</a><Icon name="chevron-right" /><span>{c.specialty}</span>
+          </nav>
+          <p class="cp-kicker"><span class="mod"></span>C TECH / {c.label.toUpperCase()}</p>
+          <h1 id="cp-title">{c.title}</h1>
+          <p class="cp-lead">{c.description}</p>
+          <ul class="cp-chips">
+            <li>Nivel {c.level}</li>
+            {hasSyllabus ? (
+              <>
+                <li>{modulesLabel(s.modules)}</li>
+                <li>{lessonsLabel(s.lessons)}</li>
+                <li>{formatMinutes(s.minutes)} de contenido</li>
+              </>
+            ) : <li>Temario próximamente</li>}
+          </ul>
+          <div class="cp-buy" id="cp-buy">
+            <div class="cp-price">
+              <small>{isFree(c) ? 'Acceso' : 'Inversión'}</small>
+              <strong class:list={{ free: isFree(c) }}>{priceLabel(c)}</strong>
+            </div>
+            <a class="btn btn-primary" href={buyUrl(c)}>{ctaLabel(c)} <Icon name="arrow-right" /></a>
+            <a class="link" href="#temario">Ver temario <Icon name="arrow-down" /></a>
+          </div>
+          <p class="cp-official"><Icon name="shield" />Contamos con validez oficial ante la SEP y el IDEFT</p>
+        </div>
+
+        <div class="cp-poster-wrap" aria-hidden="true">
+          <div class:list={['poster', 'cp-poster', c.theme]}>
+            <CourseArt theme={c.theme} variant="portrait" />
+            <span class="p-top"><span><span class="mod"></span>C TECH / {c.label.toUpperCase()}</span><b>{priceLabel(c).toUpperCase()}</b></span>
+            <span class="p-line" set:html={c.tagline.replace('\n', '<br>')} />
+            <span class="p-course"><span><b>{c.shortTitle ?? c.title}</b><small>Con {c.teacher}</small></span></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Cuerpo ===== -->
+    <div class="wrap cp-body">
+      <div class="cp-main">
+
+        {c.outcomes && c.outcomes.length > 0 && (
+          <section class="cp-sec reveal" aria-labelledby="cp-out">
+            <div class="eyebrow">Aplicación</div>
+            <h2 id="cp-out">Lo que vas a aplicar</h2>
+            <ol class="cp-outcomes">
+              {c.outcomes.map((o) => <li>{o}</li>)}
+            </ol>
+          </section>
+        )}
+
+        <section class="cp-sec reveal" id="temario" aria-labelledby="cp-syl">
+          <div class="eyebrow">Contenido</div>
+          <div class="cp-sec-head">
+            <h2 id="cp-syl">Temario</h2>
+            {hasSyllabus && <span>{modulesLabel(s.modules)} · {lessonsLabel(s.lessons)} · {formatMinutes(s.minutes)}</span>}
+          </div>
+          {hasSyllabus ? (
+            <div class="cp-modules">
+              {c.modules!.map((m, i) => {
+                const mins = m.lessons.reduce((n, l) => n + l.minutes, 0);
+                return (
+                  <details class="cp-module" open={i === 0}>
+                    <summary>
+                      <span class="cp-mod-n">{String(i + 1).padStart(2, '0')}</span>
+                      <span class="cp-mod-t">{m.title}</span>
+                      <span class="cp-mod-m">{lessonsLabel(m.lessons.length)} · {formatMinutes(mins)}</span>
+                    </summary>
+                    <ol class="cp-lessons">
+                      {m.lessons.map((l, j) => (
+                        <li>
+                          <span class="cp-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" /></svg></span>
+                          <span class="cp-les-t">{l.title ?? `Lección ${j + 1}`}</span>
+                          <span class="cp-les-m">{l.minutes} min</span>
+                        </li>
+                      ))}
+                    </ol>
+                  </details>
+                );
+              })}
+            </div>
+          ) : (
+            <div class="cp-empty"><span class="mod"></span>El temario de este programa se publicará pronto.</div>
+          )}
+        </section>
+
+        <section class="cp-sec reveal" aria-labelledby="cp-teach">
+          <div class="eyebrow">Quién enseña</div>
+          <h2 id="cp-teach">Tu docente</h2>
+          <div class="cp-teacher">
+            <div class="cp-mono" aria-hidden="true">{initials}<span class="mod"></span></div>
+            <div>
+              <strong>{c.teacher}</strong>
+              <p>{c.teacherBio}</p>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- ===== Resumen lateral ===== -->
+      <aside class="cp-aside" aria-label="Resumen del curso">
+        <div class="cp-card">
+          <small>{isFree(c) ? 'Acceso' : 'Inversión'}</small>
+          <strong class:list={['cp-card-price', { free: isFree(c) }]}>{priceLabel(c)}</strong>
+          <a class="btn btn-primary" href={buyUrl(c)}>{ctaLabel(c)} <Icon name="arrow-right" /></a>
+          <dl>
+            <div><dt>Nivel</dt><dd>{c.level}</dd></div>
+            {hasSyllabus && <div><dt>Módulos</dt><dd>{s.modules}</dd></div>}
+            {hasSyllabus && <div><dt>Lecciones</dt><dd>{s.lessons}</dd></div>}
+            {hasSyllabus && <div><dt>Duración</dt><dd>{formatMinutes(s.minutes)}</dd></div>}
+            <div><dt>Docente</dt><dd>{c.teacher}</dd></div>
+            <div><dt>Publicado</dt><dd>{formatDate(c.publishedAt)}</dd></div>
+          </dl>
+          <p class="cp-card-off"><Icon name="shield" />Validez oficial ante la SEP y el IDEFT</p>
+        </div>
+        <a class="cp-team" href={`${site.base}/contacto`}>
+          <span><b>¿Es para tu equipo?</b><small>Capacitación adaptada a tu empresa</small></span>
+          <Icon name="arrow-up-right" />
+        </a>
+      </aside>
+    </div>
+
+    <!-- ===== Más cursos ===== -->
+    {others.length > 0 && (
+      <section class="row cp-more reveal" aria-labelledby="cp-more-t">
+        <div class="wrap">
+          <div class="row-head"><div><h2 id="cp-more-t">Sigue explorando</h2><p>Otros cursos de la colección C Tech.</p></div></div>
+          <div class="rail">{others.map((o) => <CourseCard course={o} />)}</div>
+        </div>
+      </section>
+    )}
+  </main>
+
+  <!-- Barra de compra fija (aparece al pasar el hero) -->
+  <div class="cp-bar" aria-hidden="true">
+    <div class="wrap cp-bar-in">
+      <span class="cp-bar-t"><b>{c.title}</b><small>{priceLabel(c)} · Nivel {c.level}</small></span>
+      <a class="btn btn-primary btn-sm" href={buyUrl(c)} tabindex="-1">{ctaLabel(c)}</a>
+    </div>
+  </div>
+
+  <Footer />
+  <CourseModal courses={courses} />
+</Base>
+
+<script>
+  // Barra de compra: visible cuando el bloque de compra del hero sale de pantalla
+  const buy = document.getElementById('cp-buy');
+  const bar = document.querySelector<HTMLElement>('.cp-bar');
+  if (buy && bar) {
+    new IntersectionObserver(([e]) => {
+      const show = !e.isIntersecting && e.boundingClientRect.top < 0;
+      bar.classList.toggle('show', show);
+      bar.setAttribute('aria-hidden', String(!show));
+      bar.querySelector('a')?.setAttribute('tabindex', show ? '0' : '-1');
+    }).observe(buy);
+  }
+
+  // Inclinación 3D del póster con el mouse
+  const wrap = document.querySelector<HTMLElement>('.cp-poster-wrap');
+  const still = () => matchMedia('(prefers-reduced-motion: reduce)').matches || document.body.classList.contains('still');
+  if (wrap) {
+    wrap.addEventListener('pointermove', (e) => {
+      if (still() || e.pointerType !== 'mouse') return;
+      const r = wrap.getBoundingClientRect();
+      const x = (e.clientX - r.left) / r.width - 0.5;
+      const y = (e.clientY - r.top) / r.height - 0.5;
+      wrap.style.setProperty('--ry', (x * 16).toFixed(2) + 'deg');
+      wrap.style.setProperty('--rx', (-y * 12).toFixed(2) + 'deg');
+      wrap.style.setProperty('--shine', (x * 120).toFixed(1));
+    });
+    wrap.addEventListener('pointerleave', () => {
+      wrap.style.setProperty('--ry', '-8deg');
+      wrap.style.setProperty('--rx', '4deg');
+      wrap.style.setProperty('--shine', '-60');
+    });
+  }
+</script>

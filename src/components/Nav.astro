@@ -2,19 +2,21 @@
 import Brand from './Brand.astro';
 import Icon from './Icon.astro';
 import { site } from '../data/courses';
+interface Props { active?: string }
+const { active = 'inicio' } = Astro.props;
 const links = [
-  { href: '#inicio', label: 'Inicio' },
-  { href: '#programas', label: 'Programas' },
-  { href: '#ruta', label: 'Cómo aprendes' },
-  { href: '#empresas', label: 'Empresas' },
-  { href: '#preguntas', label: 'Preguntas' },
+  { href: '/#inicio', label: 'Inicio' },
+  { href: '/#programas', label: 'Programas' },
+  { href: '/#ruta', label: 'Cómo aprendes' },
+  { href: '/#empresas', label: 'Empresas' },
+  { href: '/#preguntas', label: 'Preguntas' },
 ];
 ---
 <header class="nav" id="nav">
   <div class="wrap nav-in">
     <Brand />
     <nav class="nav-links" aria-label="Principal">
-      {links.map((l, i) => <a href={l.href} class:list={{ active: i === 0 }}>{l.label}</a>)}
+      {links.map((l, i) => <a href={l.href} class:list={{ active: l.href === `/#${active}` }}>{l.label}</a>)}
     </nav>
     <div class="nav-end">
       <a class="login" href={`${site.base}/iniciar-sesion`}>Iniciar sesión</a>
@@ -53,7 +55,7 @@ const links = [
       entries.forEach((e) => {
         if (!e.isIntersecting) return;
         links.forEach((l) => {
-          const on = l.getAttribute('href') === '#' + e.target.id;
+          const on = l.hash === '#' + e.target.id;
           l.classList.toggle('active', on);
           on ? l.setAttribute('aria-current', 'location') : l.removeAttribute('aria-current');
         });
@@ -61,7 +63,7 @@ const links = [
     { rootMargin: '-45% 0px -50% 0px' }
   );
   links.forEach((l) => {
-    const el = document.querySelector(l.getAttribute('href')!);
+    const el = l.pathname === location.pathname ? document.querySelector(l.hash) : null;
     if (el) io.observe(el);
   });
 </script>

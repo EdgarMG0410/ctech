@@ -2,7 +2,7 @@
 /**
  * Ficha de curso compacta (sin scroll): arte a la izquierda, información a la derecha.
  */
-import type { Course } from '../data/courses';
+import { type Course, courseUrl, isFree, priceLabel } from '../data/courses';
 import CourseArt from './CourseArt.astro';
 import Icon from './Icon.astro';
 interface Props { courses: Course[] }
@@ -23,7 +23,7 @@ const { courses } = Astro.props;
         </div>
         <div class="m-info">
           <div class="meta">
-            {c.free && <><span class="free">Gratis</span><i></i></>}
+            <span class:list={{ free: isFree(c), price: !isFree(c) }}>{priceLabel(c)}</span><i></i>
             <span>{c.specialty}</span>
           </div>
           <h2>{c.title}</h2>
@@ -33,7 +33,7 @@ const { courses } = Astro.props;
             <div><dt>Nivel</dt><dd>{c.level}</dd></div>
           </dl>
           <div class="m-actions">
-            <a class="btn btn-primary" href={c.url}>Ir al curso <Icon name="arrow-right" /></a>
+            <a class="btn btn-primary" href={courseUrl(c)}>Ver curso <Icon name="arrow-right" /></a>
           </div>
         </div>
       </div>
