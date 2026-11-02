@@ -24,7 +24,6 @@
   .card,.step{scroll-snap-align:start}
   .rail .empty{grid-column:auto;min-width:calc(100vw - var(--gutter)*2)}
   .art-actions{opacity:1;transform:none}
-  .m-grid{grid-template-columns:1fr;gap:16px}
 }
 @media (max-width:640px){
   .hero-grid{grid-template-columns:1fr;gap:40px;padding-block:40px 36px}
@@ -63,8 +62,14 @@
   .faq details p{padding:18px 20px 22px;font-size:16px}
   .join{flex-direction:column}
   .foot-grid{grid-template-columns:1fr 1fr}
-  .m-hero{aspect-ratio:16/10}
-  .m-hero .art h3{left:20px;bottom:48px}
-  .m-body{padding:0 20px 28px}
-  .m-more-grid{grid-template-columns:1fr}
+  .m-wrap{grid-template-columns:1fr;min-height:0}
+  .m-art{height:160px;min-height:0}
+  .m-art h3{font-size:28px;bottom:18px;left:20px}
+  .m-art .art-badge{top:18px;left:20px}
+  .m-info{padding:22px 20px 22px}
+  .m-info h2{font-size:22px}
+  .m-desc{font-size:14px}
+  .m-facts{margin-top:16px;padding:12px 0}
+  .m-actions{padding-top:18px}
+  .m-close{background:rgba(11,13,14,.55)}
 }

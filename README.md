@@ -42,7 +42,7 @@ Todo sale de **`src/data/courses.ts`**. Agrega un objeto al arreglo `courses` y 
 
 - el mazo 3D del hero (si `featured: true`; se muestran hasta 3)
 - el catálogo, con filtro y búsqueda
-- la ficha modal, con "Más cursos"
+- la ficha modal (compacta, con flechas para pasar al curso anterior/siguiente)
 
 `theme` define el degradado oficial del manual: `ads` (Energía), `data` (Profundidad) o `video` (Flujo digital).
 
