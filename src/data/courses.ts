@@ -38,6 +38,8 @@ export interface Course {
   teacher: string;
   teacherBio: string;
   description: string;
+  /** Link de YouTube del video de venta (VSL) */
+  vsl: string;
   /** Lo que el alumno va a aplicar (opcional) */
   outcomes?: string[];
   /** Temario; si está vacío se muestra "se publicará pronto" */
@@ -72,6 +74,7 @@ export const courses: Course[] = [
     teacherBio: 'Fundador de C Tech y Ads Partner; estratega comercial en marketing digital.',
     description:
       'Aprende a gestionar campañas en Meta, Google y TikTok Ads desde cero: estructura, segmentación y optimización de anuncios.',
+    vsl: 'https://www.youtube.com/watch?v=aqz-KE-bpKQ', // TODO: video temporal
     outcomes: [
       'Estructurar campañas en Meta, Google y TikTok Ads',
       'Definir la segmentación de tus anuncios',
@@ -97,6 +100,7 @@ export const courses: Course[] = [
     teacherBio: '7 años en una agencia de publicidad. Dueño de 20ydos, especializada en e-commerce y medición web.',
     description:
       'Medición mínima viable, UTMs, Pixel de Meta y API de Conversiones para verificar que cada campaña mida bien antes de invertir.',
+    vsl: 'https://www.youtube.com/watch?v=aqz-KE-bpKQ', // TODO: video temporal
     outcomes: [
       'Implementar una medición mínima viable',
       'Etiquetar tus campañas con UTMs',
@@ -125,6 +129,7 @@ export const courses: Course[] = [
     teacherBio: '5 años en creación de contenido; dueña de la agencia Emprende 180.',
     description:
       'Planea, graba y edita video para marketing con criterio de negocio, no solo de estética. Piezas pensadas para comunicar con claridad.',
+    vsl: 'https://www.youtube.com/watch?v=aqz-KE-bpKQ', // TODO: video temporal
     modules: [],
     price: 0,
     publishedAt: '2026-09-26',
@@ -147,6 +152,13 @@ export const priceLabel = (c: Course) =>
   isFree(c) ? 'Gratis' : `$${c.price.toLocaleString('es-MX')}`;
 export const ctaLabel = (c: Course) =>
   isFree(c) ? 'Empezar sin costo' : `Comprar por ${priceLabel(c)}`;
+
+/** Acepta links youtube.com/watch?v=, youtu.be/, /embed/ y /shorts/ */
+export const vslEmbedUrl = (c: Course) => {
+  const id = c.vsl.match(/(?:[?&]v=|youtu\.be\/|\/embed\/|\/shorts\/)([\w-]{11})/)?.[1];
+  if (!id) throw new Error(`El curso "${c.id}" no tiene un link de YouTube válido: ${c.vsl}`);
+  return `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0&playsinline=1`;
+};
 
 export const stats = (c: Course) => {
   const modules = c.modules ?? [];

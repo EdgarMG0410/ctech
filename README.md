@@ -43,9 +43,9 @@ Todo sale de **`src/data/courses.ts`**. Agrega un objeto al arreglo `courses` y 
 - el mazo 3D del hero (si `featured: true`; se muestran hasta 3)
 - el catálogo, con filtro y búsqueda
 - la ficha modal
-- su propia página en `/programas/<id>` (hero, lo que vas a aplicar, temario, docente, tarjeta de compra)
+- su propia página en `/programas/<id>` (hero con VSL, lo que vas a aplicar, temario, docente, tarjeta de compra)
 
-Precio (`price`, 0 = gratis), nivel, temario (`modules`) y bio del docente viven en el mismo objeto.
+Precio (`price`, 0 = gratis), nivel, video de venta (`vsl`, link de YouTube), temario (`modules`) y bio del docente viven en el mismo objeto.
 
 `theme` define el degradado oficial del manual: `ads` (Energía), `data` (Profundidad) o `video` (Flujo digital).
 
@@ -65,6 +65,7 @@ src/
     Catalog.astro          ← fila de cursos con filtros
     CourseCard.astro       ← card horizontal del catálogo
     CourseModal.astro      ← ficha de curso (<dialog> + <template> por curso)
+    CourseVideo.astro      ← VSL del curso (portada de marca + YouTube al dar clic)
     CourseArt.astro        ← arte por tema con los gráficos auxiliares del manual
     Route, Statement, Enterprise, Official, Faq, Closing, Footer
     Brand, Icon, Sprites   ← logo, íconos (estilo Lucide), símbolos SVG

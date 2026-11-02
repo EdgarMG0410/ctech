@@ -6,9 +6,9 @@
 import Base from '../../layouts/Base.astro';
 import Nav from '../../components/Nav.astro';
 import Footer from '../../components/Footer.astro';
-import CourseArt from '../../components/CourseArt.astro';
 import CourseCard from '../../components/CourseCard.astro';
 import CourseModal from '../../components/CourseModal.astro';
+import CourseVideo from '../../components/CourseVideo.astro';
 import Icon from '../../components/Icon.astro';
 import {
   courses, site, type Course, buyUrl, ctaLabel, priceLabel, isFree,
@@ -64,14 +64,7 @@ const modulesLabel = (n: number) => `${n} ${n === 1 ? 'módulo' : 'módulos'}`;
           <p class="cp-official"><Icon name="shield" />Contamos con validez oficial ante la SEP y el IDEFT</p>
         </div>
 
-        <div class="cp-poster-wrap" aria-hidden="true">
-          <div class:list={['poster', 'cp-poster', c.theme]}>
-            <CourseArt theme={c.theme} variant="portrait" />
-            <span class="p-top"><span><span class="mod"></span>C TECH / {c.label.toUpperCase()}</span><b>{priceLabel(c).toUpperCase()}</b></span>
-            <span class="p-line" set:html={c.tagline.replace('\n', '<br>')} />
-            <span class="p-course"><span><b>{c.shortTitle ?? c.title}</b><small>Con {c.teacher}</small></span></span>
-          </div>
-        </div>
+        <CourseVideo course={c} />
       </div>
     </section>
 
@@ -194,25 +187,5 @@ const modulesLabel = (n: number) => `${n} ${n === 1 ? 'módulo' : 'módulos'}`;
       bar.setAttribute('aria-hidden', String(!show));
       bar.querySelector('a')?.setAttribute('tabindex', show ? '0' : '-1');
     }).observe(buy);
-  }
-
-  // Inclinación 3D del póster con el mouse
-  const wrap = document.querySelector<HTMLElement>('.cp-poster-wrap');
-  const still = () => matchMedia('(prefers-reduced-motion: reduce)').matches || document.body.classList.contains('still');
-  if (wrap) {
-    wrap.addEventListener('pointermove', (e) => {
-      if (still() || e.pointerType !== 'mouse') return;
-      const r = wrap.getBoundingClientRect();
-      const x = (e.clientX - r.left) / r.width - 0.5;
-      const y = (e.clientY - r.top) / r.height - 0.5;
-      wrap.style.setProperty('--ry', (x * 16).toFixed(2) + 'deg');
-      wrap.style.setProperty('--rx', (-y * 12).toFixed(2) + 'deg');
-      wrap.style.setProperty('--shine', (x * 120).toFixed(1));
-    });
-    wrap.addEventListener('pointerleave', () => {
-      wrap.style.setProperty('--ry', '-8deg');
-      wrap.style.setProperty('--rx', '4deg');
-      wrap.style.setProperty('--shine', '-60');
-    });
   }
 </script>

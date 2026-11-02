@@ -1,0 +1,40 @@
+---
+/**
+ * VSL del curso: portada de marca que carga el reproductor de YouTube al dar clic.
+ * Sin JS, la portada funciona como link directo al video.
+ */
+import { type Course, vslEmbedUrl } from '../data/courses';
+import CourseArt from './CourseArt.astro';
+interface Props { course: Course }
+const { course: c } = Astro.props;
+---
+<div class="cp-vsl">
+  <a
+    class:list={['cp-vsl-cover', 'art', c.theme]}
+    href={c.vsl}
+    target="_blank"
+    rel="noopener"
+    data-embed={vslEmbedUrl(c)}
+    aria-label={`Reproducir video de presentación: ${c.title}`}
+  >
+    <CourseArt theme={c.theme} />
+    <span class="art-badge"><span class="mod"></span>C TECH / {c.label.toUpperCase()}</span>
+    <span class="cp-vsl-line" set:html={c.tagline.replace('\n', '<br>')} />
+    <span class="cp-vsl-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" /></svg></span>
+  </a>
+</div>
+
+<script>
+  document.querySelector<HTMLAnchorElement>('.cp-vsl-cover')?.addEventListener('click', (e) => {
+    e.preventDefault();
+    const cover = e.currentTarget as HTMLAnchorElement;
+    const frame = document.createElement('iframe');
+    frame.src = cover.dataset.embed!;
+    frame.title = cover.getAttribute('aria-label')!;
+    frame.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
+    frame.allowFullscreen = true;
+    frame.referrerPolicy = 'strict-origin-when-cross-origin';
+    cover.replaceWith(frame);
+    frame.focus();
+  });
+</script>
